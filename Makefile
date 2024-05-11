@@ -9,10 +9,11 @@ VERILATOR_COMD_DIR = $(VERILATOR_SIM_DIR)/comp
 VCS_COMD_DIR = $(VCS_SIM_DIR)/comp
 VERILATOR_RUN_DIR = $(VERILATOR_SIM_DIR)/$(BIN)
 VCS_RUN_DIR = $(VCS_SIM_DIR)/$(BIN)
+FILELIST = $(abspath dut)/flist.f
  
 emu:$(FLIST)
 	mkdir -p $(VERILATOR_COMD_DIR)
-	$(MAKE) -f verilator.mk emu FILELIST=dut/flist.f COMP_DIR=$(VERILATOR_COMD_DIR) VTOP=SimTop THREADS=$(THREADS)
+	$(MAKE) -f verilator.mk emu FILELIST=$(FILELIST) COMP_DIR=$(VERILATOR_COMD_DIR) VTOP=SimTop THREADS=$(THREADS)
 
 simv:
 	mkdir -p $(VCS_COMD_DIR)
