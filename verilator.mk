@@ -16,7 +16,7 @@ VERILATOR_FLAGS = --cc --exe -O3 --top-module $(VTOP)
 VERILATOR_FLAGS += --no-timing --threads $(THREADS) --threads-dpi all
 VERILATOR_FLAGS += -Wno-UNOPTTHREADS -Wno-STMTDLY -Wno-WIDTH
 VERILATOR_FLAGS += -CFLAGS -std=c++17 -I$(INCLUDE_DIR)
-VERILATOR_FLAGS += +define+ASSERT_VERBOSE_COND_=0 +define+STOP_COND_=0 +define+SYNTHESIS
+VERILATOR_FLAGS += +define+ASSERT_VERBOSE_COND_=0 +define+STOP_COND_=0
 VERILATOR_FLAGS += +define+LPA_SIM_TOP=SimTop.l_soc.core_with_l2.core.ctrlBlock.intDq
 VERILATOR_FLAGS += -CFLAGS -std=c++17 -I$(INCLUDE_DIR)
 VERILATOR_FLAGS += $(CXXFILES) -f $(FILELIST) -o $(abspath $(EMU)) -Mdir $(COMP_DIR)
