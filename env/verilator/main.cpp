@@ -37,7 +37,7 @@ bool do_uart(VSimTop *mod)
     char word = code & 0x7f;
     if (isEnd)
     {
-      std::cout << "\033[32mHIT GOOD TRAP!\033[0m" << std::endl;
+      std::cout << "\033[32mSIMULATION SUCCESSED!\033[0m" << std::endl;
     }
     else
     {

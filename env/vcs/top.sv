@@ -74,7 +74,7 @@ always @(posedge clock) begin
       $fwrite(32'h8000_0001, "%c", io_uart_out_ch);
       $fflush();
     end else begin
-      $display("\033[32mHIT GOOD TRAP!\033[0m");
+      $display("\033[32mSIMULATION SUCCESSED!\033[0m");
     end
   end
   if(reset) begin
