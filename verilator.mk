@@ -8,7 +8,7 @@ EMU_SRC_DIR = $(abspath env/verilator)
 CXXFILES += $(shell find $(EMU_SRC_DIR) -name "*.cpp")
 
 INCLUDE_DIR = $(abspath env/common/include)
-HEADERS = $(shell find $(INCLUDE_DIR) -name "*[.h|.hpp]")
+HEADERS = $(shell find $(INCLUDE_DIR) -name "*.h" -or -name "*.hpp")
 
 CFLAGS = -std=c++17 -I$(INCLUDE_DIR) -I$(COMP_DIR)
 LDFLAGS = -lrt -lpthread
@@ -16,7 +16,7 @@ LDFLAGS = -lrt -lpthread
 VERILATOR_FLAGS = --cc --exe -O3 --top-module $(VTOP)
 VERILATOR_FLAGS += --no-timing --threads $(THREADS) --threads-dpi all
 VERILATOR_FLAGS += +define+ASSERT_VERBOSE_COND_=0 +define+STOP_COND_=0 +define+VERILATOR_5016
-VERILATOR_FLAGS += +define+LPA_SIM_TOP=$(LPA_SIM_TOP)
+VERILATOR_FLAGS += +define+LPA_SIM_TOP=SimTop.$(LPA_SIM_TOP)
 VERILATOR_FLAGS += -Wno-UNOPTTHREADS -Wno-STMTDLY -Wno-WIDTH
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)"
 VERILATOR_FLAGS += -LDFLAGS "$(LDFLAGS)"

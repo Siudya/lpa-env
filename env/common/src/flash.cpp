@@ -21,7 +21,7 @@ extern "C" void flash_read(uint32_t addr, uint64_t *data) {
   }
 }
 
-void init_flash() {
+extern "C" void init_flash() {
   flash_base = (uint64_t *)mmap(NULL, FLASH_SIZE, PROT_READ | PROT_WRITE,
                                 MAP_ANON | MAP_PRIVATE, -1, 0);
   if (flash_base == (uint64_t *)MAP_FAILED) {
@@ -37,7 +37,7 @@ void init_flash() {
   flash_base[1] = 0x00028067;
 }
 
-void flash_finish() {
+extern "C" void flash_finish() {
   munmap(flash_base, FLASH_SIZE);
   flash_base = NULL;
 }

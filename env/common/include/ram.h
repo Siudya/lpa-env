@@ -5,12 +5,11 @@
 #include <fstream>
 #include <functional>
 
-#ifndef DEFAULT_EMU_RAM_SIZE
-#define DEFAULT_EMU_RAM_SIZE (256 * 1024 * 1024UL)
-#endif
-
 uint64_t pmem_read(uint64_t raddr);
 void pmem_write(uint64_t waddr, uint64_t wdata);
+
+extern "C" void init_mem(const char *s);
+extern "C" void mem_finish();
 
 class FileReader {
 public:
@@ -31,6 +30,7 @@ public:
     return index < PMEM_SIZE / sizeof(uint64_t);
   }
   virtual uint64_t &at(uint64_t index) = 0;
+  virtual ~SimMemory() = default;
 };
 
 extern SimMemory *simMemory;

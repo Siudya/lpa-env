@@ -82,3 +82,11 @@ void pmem_write(uint64_t waddr, uint64_t wdata) {
   waddr -= PMEM_BASE;
   return difftest_ram_write(waddr / sizeof(uint64_t), wdata, -1UL);
 }
+
+extern "C" void init_mem(const char *s) {
+  simMemory = new MmapMemory(s);
+}
+
+extern "C" void mem_finish() {
+  delete simMemory;
+}
