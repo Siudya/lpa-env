@@ -19,7 +19,7 @@ endif
 SIM_FILELIST = $(COMP_DIR)/sim.f
 SIMV = $(COMP_DIR)/simv
 
-VCS_FLAGS += -full64 +v2k -timescale=1ns/1ns -sverilog +lint=TFIPC-L -l vcs.log -top tb_top
+VCS_FLAGS += -full64 +v2k -timescale=1ns/1ns -sverilog +warn=noTFIPC -l comp.log -top tb_top
 VCS_FLAGS += -fgp -kdb +nospecify +notimingcheck +vcs+initreg+random -assert enable_hier
 VCS_FLAGS += +define+ASSERT_VERBOSE_COND_=0 +define+STOP_COND_=0
 VCS_FLAGS += +define+VCS +define+LPA_SIM_TOP=tb_top.sim.$(LPA_SIM_TOP)

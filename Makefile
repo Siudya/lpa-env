@@ -2,6 +2,7 @@ SIM_DIR = $(abspath sim)
 BIN_DIR = $(abspath bin)
 BIN ?= dhrystone
 THREADS ?= 8
+WAVE ?= 0
 
 VERILATOR_SIM_DIR = $(SIM_DIR)/verilator
 VCS_SIM_DIR = $(SIM_DIR)/vcs
@@ -26,8 +27,12 @@ emu-run:
 	@ln -s $(VERILATOR_COMD_DIR)/emu $(VERILATOR_RUN_DIR)/emu
 	cd $(VERILATOR_RUN_DIR) && (./emu $(BIN_DIR)/$(BIN).bin 2> assert.log | tee sim.log)
 
-VCS_RUN_OPT = vcs+initreg+0 +bin=$(BIN_DIR)/$(BIN).bin
-VCS_RUN_OPT += -fgp=num_threads:4,num_fsdb_threads:4 -assert finish_maxfail=30 -assert global_finish_maxfail=1000
+VCS_RUN_OPT = vcs+initreg+0 +bin=$(BIN_DIR)/$(BIN).bin -fgp=num_threads:4,num_fsdb_threads:4
+VCS_RUN_OPT += -no_save -assert finish_maxfail=30 -assert global_finish_maxfail=1000
+
+ifeq ($(WAVE), 1)
+VCS_RUN_OPT += +dump-wave
+endif
 
 simv-run:
 	$(shell if [ ! -e $(VCS_RUN_DIR) ];then mkdir -p $(VCS_RUN_DIR); fi)
@@ -39,10 +44,9 @@ simv-run:
 	cd $(VCS_RUN_DIR) && (./simv $(VCS_RUN_OPT) 2> assert.log | tee sim.log)
 
 verdi:
-	cd $(VCS_RUN_DIR) && verdi -sv -2001 +verilog2001ext+v +systemverilogext+sv -ssf tb_top.vf -dbdir simv.daidir -f sim.f
+	cd $(VCS_RUN_DIR) && verdi -ssf tb_top.vf -dbdir simv.daidir
 
 clean:
-	@rm -rf $(VERILATOR_COMD_DIR)
-	@rm -rf $(VCS_COMD_DIR)
+	@rm -rf $(SIM_DIR)
 
 .PHONY:clean emu simv verdi emu-run simv-run
