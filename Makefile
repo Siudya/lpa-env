@@ -3,6 +3,7 @@ BIN_DIR = $(abspath bin)
 BIN ?= dhrystone
 THREADS ?= 8
 WAVE ?= 0
+TO ?= 0
 
 VERILATOR_SIM_DIR = $(SIM_DIR)/verilator
 VCS_SIM_DIR = $(SIM_DIR)/vcs
@@ -28,10 +29,14 @@ emu-run:
 	cd $(VERILATOR_RUN_DIR) && (./emu $(BIN_DIR)/$(BIN).bin 2> assert.log | tee sim.log)
 
 VCS_RUN_OPT = vcs+initreg+0 +bin=$(BIN_DIR)/$(BIN).bin -fgp=num_threads:4,num_fsdb_threads:4
-VCS_RUN_OPT += -no_save -assert finish_maxfail=30 -assert global_finish_maxfail=1000
+VCS_RUN_OPT += -assert finish_maxfail=30 -assert global_finish_maxfail=1000
 
 ifeq ($(WAVE), 1)
 VCS_RUN_OPT += +dump-wave
+endif
+
+ifneq ($(TO), 0)
+VCS_RUN_OPT += +max-cycles=$(TO)
 endif
 
 simv-run:
@@ -40,7 +45,6 @@ simv-run:
 	$(shell if [ -e $(VCS_RUN_DIR)/simv.daidir ];then rm -rf $(VCS_RUN_DIR)/simv.daidir; fi)
 	@ln -s $(VCS_COMD_DIR)/simv $(VCS_RUN_DIR)/simv
 	@ln -s $(VCS_COMD_DIR)/simv.daidir $(VCS_RUN_DIR)/simv.daidir
-	@cp -f $(VCS_COMD_DIR)/sim.f $(VCS_RUN_DIR)/sim.f
 	cd $(VCS_RUN_DIR) && (./simv $(VCS_RUN_OPT) 2> assert.log | tee sim.log)
 
 verdi:

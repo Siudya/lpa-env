@@ -31,10 +31,13 @@ reg         io_perfInfo_dump;
 wire        io_uart_out_valid;
 wire [ 7:0] io_uart_out_ch;
 wire        io_uart_in_valid;
+reg [63:0]  cycles;
+reg [63:0]  max_cycles;
 
 initial begin
   clock = 0;
   reset = 1;
+  max_cycles = 0;
   if ($test$plusargs("dump-wave")) begin
     $display("Dumping FSDB Waveform for DEBUG is active !!!");
     $fsdbAutoSwitchDumpfile(10000,"tb_top.fsdb",60);
@@ -47,9 +50,16 @@ initial begin
     $value$plusargs("bin=%s", bin_file);
     init_mem(bin_file);
   end
+
+  if ($test$plusargs("max-cycles")) begin
+    $value$plusargs("max-cycles=%d", max_cycles);
+    $display("set max cycles: %1d", max_cycles);
+  end
+
   init_flash();
 
   #100 reset = 0;
+  $display("Reset is released!");
 end
 
 always #1 clock <= ~clock;
@@ -92,8 +102,18 @@ always @(posedge clock) begin
 end
 
 always @(posedge clock) begin
-  if(reset) time_start();
-  else cycle_add();
+  if(reset) begin
+    cycles <= 0;
+    time_start();
+  end else begin 
+    cycles <= cycles + 1'b1;
+    cycle_add();
+  end
+
+  if(!reset && cycles >= max_cycles && max_cycles != 0) begin
+    $display("Simutlation Timeout!");
+    $finish;
+  end
 end
 
 endmodule

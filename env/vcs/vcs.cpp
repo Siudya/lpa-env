@@ -19,5 +19,5 @@ extern "C" void time_end() {
   auto et = system_clock::now();
   auto elapsedMs = duration_cast<milliseconds>(et - st).count();
   auto speed = double(cycles * 1000) / elapsedMs;
-  std::cout << "Cycles: " << cycles << " Time elapsed: " << elapsedMs << "ms " << "Speed: " << speed << " ticks/s" << endl;
+  cout << "Cycles: " << cycles << " Time elapsed: " << elapsedMs << "ms " << "Speed: " << speed << " ticks/s" << endl;
 }
