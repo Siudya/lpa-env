@@ -38,6 +38,7 @@ initial begin
   clock = 0;
   reset = 1;
   max_cycles = 0;
+  io_perfInfo_dump = 0;
   if ($test$plusargs("dump-wave")) begin
     $display("Dumping FSDB Waveform for DEBUG is active !!!");
     $fsdbAutoSwitchDumpfile(10000,"tb_top.fsdb",60);
